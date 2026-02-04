@@ -25,6 +25,7 @@ import { leaveRequestsRouter } from "./routes/leave-requests";
 import { salaryRecordsRouter } from "./routes/salary-records";
 import { systemAssetsRouter } from "./routes/system-assets";
 import { clearDataRouter } from "./routes/clear-data";
+import { debugRouter } from "./routes/debug";
 import {
   handleLogin,
   handleLogout,
@@ -113,6 +114,11 @@ export function createServer() {
 
   // Clear data API (for development/testing - admin only)
   app.use("/api/clear-data", isAuthenticated, requireAdmin, clearDataRouter);
+
+  // Debug routes (development only) - no auth so you can verify data quickly
+  if (process.env.NODE_ENV !== "production") {
+    app.use("/api/debug", debugRouter);
+  }
 
   return app;
 }
